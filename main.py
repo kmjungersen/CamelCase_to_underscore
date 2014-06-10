@@ -27,7 +27,9 @@ class convert_camel_case():
 
         for file in listdir(self.convert_dir):
 
-            self.file_list.append(file)
+            if file != '.gitignore':
+
+                self.file_list.append(file)
 
         if len(self.file_list) > 0:
 
@@ -59,16 +61,16 @@ class convert_camel_case():
 
         while finished == False:
 
-            print '==================================\n'
-            print 'Please enter phrase you would like to convert from\n'
-            print 'CamelCase to_underscores! '
+            print '=================================='
+            print 'Please enter phrase you would like to convert from'
+            print 'CamelCase to_underscores! \n'
 
             self.manual_phrase = raw_input()
 
             output = self.convert(self.manual_phrase)
 
             print 'Your converted phrase:\n'
-            print '==================================\n'
+            print '=================================='
             print output
             print '==================================\n'
             print 'Go again (y/n)?'
@@ -93,6 +95,17 @@ class convert_camel_case():
 
         rmtree(self.convert_dir)
         mkdir(self.convert_dir)
+
+        with open(self.converted_dir + '.gitignore', 'r') as infile, \
+             open(self.convert_dir + '.gitignore', 'w+') as outfile:
+
+            f = infile.read()
+            outfile.write(f)
+
+        print '==================================\n'
+        print str(len(self.file_list)) + ' file(s) was/were converted succesfully.\n'
+        print 'Be sure to check for any strange underscore behavior'
+        print 'before using your converted files.\n'
 
 
 if __name__ == '__main__':
