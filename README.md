@@ -6,6 +6,7 @@ This tool will help you convert files that use CamelCase conventions to \_unders
 Running the program is simple:
 
 `$ cd <wherever this may live>/CamelCase_to_underscore`
+
 `$ python main.py`
 
 If you want to convert a single phrase (or a number of phrases for that matter),\n
