@@ -6,7 +6,7 @@ from shutil import rmtree
 
 class convert_camel_case():
 
-    '''A very simple tool to convert CamelCase to_underscore.
+    """A very simple tool to convert CamelCase to_underscore.
     The class can handle a file (or any number of files) and
     can also simply take a users input and convert it.
 
@@ -14,7 +14,7 @@ class convert_camel_case():
     be customized in __init__.
 
     For usage elsewhere, the 'convert' method is what actually
-     does the CamelCase conversion.'''
+     does the CamelCase conversion."""
 
     #TODO (kmjungersen): More detailed documentation
 
@@ -42,14 +42,14 @@ class convert_camel_case():
 
 
     def convert(self, var_name):
-        '''This method of converting CamelCase to_underscore
+        """This method of converting CamelCase to_underscore
         is borrowed from the StackOverflow post at:
         http://stackoverflow.com/questions/1175208/
-        elegant-python-function-to-convert-camelcase-to-camel-case
+        elegant-python-function-to-convert-CamelCase-to-camel-case
 
         The only borrowed things are the regex substitutions
         described in this post.
-        '''
+        """
 
         s1 = sub('(.)([A-Z][a-z]+)', r'\1_\2', var_name)
         s2 = sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
@@ -87,11 +87,13 @@ class convert_camel_case():
             with open(self.convert_dir + item, 'r+') as infile, \
                  open(self.converted_dir + item, 'w+') as outfile:
 
-                f = infile.read()
+                file_line = infile.readline()
 
-                f = self.convert(f)
+                if {'class'} in file_line:
 
-                outfile.write(f)
+                    file_line = self.convert(file_line)
+
+                outfile.write(file_line)
 
         rmtree(self.convert_dir)
         mkdir(self.convert_dir)
