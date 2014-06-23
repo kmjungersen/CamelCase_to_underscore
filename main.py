@@ -4,6 +4,7 @@ from re import sub
 from os import listdir, mkdir
 from shutil import rmtree
 
+
 class ConvertCamelCase():
 
     """A very simple tool to convert CamelCase to_underscore.
@@ -40,8 +41,7 @@ class ConvertCamelCase():
             self.manual_phrase = ''
             self.manual_convert()
 
-
-    def convert(self, var_name):
+    def convert(self, file_to_convert):
         """This method of converting CamelCase to_underscore
         is borrowed from the StackOverflow post at:
         http://stackoverflow.com/questions/1175208/
@@ -51,15 +51,20 @@ class ConvertCamelCase():
         described in this post.
         """
 
-        s1 = sub('(.)([A-Z][a-z]+)', r'\1_\2', var_name)
+        s1 = sub('(.)([A-Z][a-z]+)', r'\1_\2', file_to_convert)
         s2 = sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
         return s2
 
     def manual_convert(self):
+        """This method will only be called if nothing exists in
+        the 'to_be_converted' directory.  It prompts the user
+        for a phrase that it can convert from CamelCase_to_underscore.
+        """
 
         finished = False
 
-        while finished == False:
+        while not finished:
 
             print '=================================='
             print 'Please enter phrase you would like to convert from'
@@ -81,6 +86,17 @@ class ConvertCamelCase():
                 finished = True
 
     def file_convert(self):
+        """This method gets called when the are files in the
+        'to_be_converted' directory.  It will open each file in
+        the list, read it and convert it, then write it to a file
+        of the same name in the 'converted' directory.
+
+        After doing so, it deletes and recreates the 'to_be_converted'
+        directory and then recreates the '.gitignore' file in said
+        directory.
+
+        Finally, a summary is displayed in the console.
+        """
 
         for item in self.file_list:
 
@@ -103,7 +119,7 @@ class ConvertCamelCase():
             outfile.write(f)
 
         print '==================================\n'
-        print str(len(self.file_list)) + ' file(s) was/were converted succesfully.\n'
+        print str(len(self.file_list)) + ' file(s) was/were converted successfully.\n'
         print 'Be sure to check for any strange underscore behavior'
         print 'before using your converted files.\n'
 
