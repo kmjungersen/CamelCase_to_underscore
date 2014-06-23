@@ -87,13 +87,11 @@ class ConvertCamelCase():
             with open(self.convert_dir + item, 'r+') as infile, \
                  open(self.converted_dir + item, 'w+') as outfile:
 
-                file_line = infile.readline()
+                f = infile.read()
 
-                if {'class'} in file_line:
+                f = self.convert(f)
 
-                    file_line = self.convert(file_line)
-
-                outfile.write(file_line)
+                outfile.write(f)
 
         rmtree(self.convert_dir)
         mkdir(self.convert_dir)
