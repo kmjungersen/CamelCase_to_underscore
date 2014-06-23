@@ -4,7 +4,7 @@ from re import sub
 from os import listdir, mkdir
 from shutil import rmtree
 
-class convert_camel_case():
+class ConvertCamelCase():
 
     '''A very simple tool to convert CamelCase to_underscore.
     The class can handle a file (or any number of files) and
@@ -109,4 +109,4 @@ class convert_camel_case():
 
 
 if __name__ == '__main__':
-    convert_camel_case()
+    ConvertCamelCase()
