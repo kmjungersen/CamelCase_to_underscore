@@ -6,7 +6,6 @@ from shutil import rmtree
 
 
 class ConvertCamelCase():
-
     """A very simple tool to convert CamelCase to_underscore.
     The class can handle a file (or any number of files) and
     can also simply take a users input and convert it.
@@ -15,7 +14,8 @@ class ConvertCamelCase():
     be customized in __init__.
 
     For usage elsewhere, the 'convert' method is what actually
-     does the CamelCase conversion."""
+    does the CamelCase conversion.
+    """
 
     #TODO (kmjungersen): More detailed documentation
 
@@ -26,22 +26,26 @@ class ConvertCamelCase():
 
         self.file_list = []
 
-        for file in listdir(self.convert_dir):
+        self.ignore_keywords = {'class',
+                                'import',
+                                }
 
-            if file != '.gitignore':
+        for file_name in listdir(self.convert_dir):
 
-                self.file_list.append(file)
+            if file_name != '.gitignore':
+
+                self.file_list.append(file_name)
 
         if len(self.file_list) > 0:
 
-            self.file_convert()
+            self.line_convert()
 
         else:
 
             self.manual_phrase = ''
             self.manual_convert()
 
-    def convert(self, file_to_convert):
+    def convert(self, string_to_convert):
         """This method of converting CamelCase to_underscore
         is borrowed from the StackOverflow post at:
         http://stackoverflow.com/questions/1175208/
@@ -51,10 +55,25 @@ class ConvertCamelCase():
         described in this post.
         """
 
-        s1 = sub('(.)([A-Z][a-z]+)', r'\1_\2', file_to_convert)
-        s2 = sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        return_string = ''
 
-        return s2
+        for item in self.ignore_keywords:
+
+            if item in string_to_convert:
+
+                return_string = string_to_convert
+
+            else:
+                s1 = string_to_convert
+                #s1 = sub('(.)([A-Z][a-z]+)', r'\1_\2', string_to_convert)
+                return_string = sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+
+        return_string = sub('(true)', 'True', return_string)
+
+        return_string = sub('(false)', 'False', return_string)
+
+        return return_string
 
     def manual_convert(self):
         """This method will only be called if nothing exists in
@@ -103,11 +122,45 @@ class ConvertCamelCase():
             with open(self.convert_dir + item, 'r+') as infile, \
                  open(self.converted_dir + item, 'w+') as outfile:
 
+                #Where the potential line by line conversion will happen
+
                 f = infile.read()
 
                 f = self.convert(f)
 
                 outfile.write(f)
+
+        rmtree(self.convert_dir)
+        mkdir(self.convert_dir)
+
+        with open(self.converted_dir + '.gitignore', 'r') as infile, \
+             open(self.convert_dir + '.gitignore', 'w+') as outfile:
+
+            f = infile.read()
+            outfile.write(f)
+
+        print '==================================\n'
+        print str(len(self.file_list)) + ' file(s) was/were converted successfully.\n'
+        print 'Be sure to check for any strange underscore behavior'
+        print 'before using your converted files.\n'
+
+    def line_convert(self):
+        """EXPERIMENTAL METHOD!!!!
+        """
+
+        for item in self.file_list:
+
+            infile_fp = self.convert_dir + item
+            outfile_fp = self.converted_dir + item
+
+            with open(infile_fp, 'r') as infile, \
+                    open(outfile_fp, 'w+') as outfile:
+
+                for line in infile:
+
+                    converted_line = self.convert(line)
+
+                    outfile.write(converted_line)
 
         rmtree(self.convert_dir)
         mkdir(self.convert_dir)
