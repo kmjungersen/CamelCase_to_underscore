@@ -144,9 +144,25 @@ class ConvertCamelCase():
         print 'Be sure to check for any strange underscore behavior'
         print 'before using your converted files.\n'
 
+    def process(self, line):
+
+        exclude_lines = {
+            'class': '(class )\w+(?=\()'
+            'import'
+        }
+        #
+        # for item in exclude_lines:
+        #     if item in line:
+
+
     def line_convert(self):
         """EXPERIMENTAL METHOD!!!!
         """
+
+
+        class_names = [
+
+        ]
 
         for item in self.file_list:
 
@@ -157,6 +173,9 @@ class ConvertCamelCase():
                     open(outfile_fp, 'w+') as outfile:
 
                 for line in infile:
+
+                    #TODO(kmjungersen) - use regex to scan entire file and store the class names in a list before proceeding
+                    converted_line = self.process(line)
 
                     converted_line = self.convert(line)
 
